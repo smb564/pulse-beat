@@ -20,12 +20,23 @@ public class InitialSetupMigration {
 
     @ChangeSet(order = "01", author = "initiator", id = "01-addAuthorities")
     public void addAuthorities(MongoTemplate mongoTemplate) {
+        // Add authorities to the database
         Authority adminAuthority = new Authority();
         adminAuthority.setName(AuthoritiesConstants.ADMIN);
+
         Authority userAuthority = new Authority();
         userAuthority.setName(AuthoritiesConstants.USER);
+
+        Authority companyAdmin = new Authority();
+        companyAdmin.setName(AuthoritiesConstants.COMPANY_ADMIN);
+
+        Authority managerAuth = new Authority();
+        managerAuth.setName(AuthoritiesConstants.MANAGER);
+
         mongoTemplate.save(adminAuthority);
         mongoTemplate.save(userAuthority);
+        mongoTemplate.save(companyAdmin);
+        mongoTemplate.save(managerAuth);
     }
 
     @ChangeSet(order = "02", author = "initiator", id = "02-addUsers")

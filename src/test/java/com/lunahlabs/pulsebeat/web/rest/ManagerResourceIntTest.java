@@ -42,6 +42,9 @@ public class ManagerResourceIntTest {
     private static final String DEFAULT_DEPARTMENT = "AAAAAAAAAA";
     private static final String UPDATED_DEPARTMENT = "BBBBBBBBBB";
 
+    private static final String DEFAULT_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_USER_ID = "BBBBBBBBBB";
+
     @Autowired
     private ManagerRepository managerRepository;
 
@@ -80,7 +83,8 @@ public class ManagerResourceIntTest {
     public static Manager createEntity() {
         Manager manager = new Manager()
             .companyId(DEFAULT_COMPANY_ID)
-            .department(DEFAULT_DEPARTMENT);
+            .department(DEFAULT_DEPARTMENT)
+            .userId(DEFAULT_USER_ID);
         return manager;
     }
 
@@ -106,6 +110,7 @@ public class ManagerResourceIntTest {
         Manager testManager = managerList.get(managerList.size() - 1);
         assertThat(testManager.getCompanyId()).isEqualTo(DEFAULT_COMPANY_ID);
         assertThat(testManager.getDepartment()).isEqualTo(DEFAULT_DEPARTMENT);
+        assertThat(testManager.getUserId()).isEqualTo(DEFAULT_USER_ID);
     }
 
     @Test
@@ -137,7 +142,8 @@ public class ManagerResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(manager.getId())))
             .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.toString())))
-            .andExpect(jsonPath("$.[*].department").value(hasItem(DEFAULT_DEPARTMENT.toString())));
+            .andExpect(jsonPath("$.[*].department").value(hasItem(DEFAULT_DEPARTMENT.toString())))
+            .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID.toString())));
     }
 
     @Test
@@ -151,7 +157,8 @@ public class ManagerResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(manager.getId()))
             .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.toString()))
-            .andExpect(jsonPath("$.department").value(DEFAULT_DEPARTMENT.toString()));
+            .andExpect(jsonPath("$.department").value(DEFAULT_DEPARTMENT.toString()))
+            .andExpect(jsonPath("$.userId").value(DEFAULT_USER_ID.toString()));
     }
 
     @Test
@@ -172,7 +179,8 @@ public class ManagerResourceIntTest {
         Manager updatedManager = managerRepository.findOne(manager.getId());
         updatedManager
             .companyId(UPDATED_COMPANY_ID)
-            .department(UPDATED_DEPARTMENT);
+            .department(UPDATED_DEPARTMENT)
+            .userId(UPDATED_USER_ID);
 
         restManagerMockMvc.perform(put("/api/managers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -185,6 +193,7 @@ public class ManagerResourceIntTest {
         Manager testManager = managerList.get(managerList.size() - 1);
         assertThat(testManager.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
         assertThat(testManager.getDepartment()).isEqualTo(UPDATED_DEPARTMENT);
+        assertThat(testManager.getUserId()).isEqualTo(UPDATED_USER_ID);
     }
 
     @Test

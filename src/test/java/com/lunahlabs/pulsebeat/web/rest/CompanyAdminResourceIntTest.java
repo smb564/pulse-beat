@@ -39,6 +39,9 @@ public class CompanyAdminResourceIntTest {
     private static final String DEFAULT_COMPANY_ID = "AAAAAAAAAA";
     private static final String UPDATED_COMPANY_ID = "BBBBBBBBBB";
 
+    private static final String DEFAULT_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_USER_ID = "BBBBBBBBBB";
+
     @Autowired
     private CompanyAdminRepository companyAdminRepository;
 
@@ -76,7 +79,8 @@ public class CompanyAdminResourceIntTest {
      */
     public static CompanyAdmin createEntity() {
         CompanyAdmin companyAdmin = new CompanyAdmin()
-            .companyId(DEFAULT_COMPANY_ID);
+            .companyId(DEFAULT_COMPANY_ID)
+            .userId(DEFAULT_USER_ID);
         return companyAdmin;
     }
 
@@ -101,6 +105,7 @@ public class CompanyAdminResourceIntTest {
         assertThat(companyAdminList).hasSize(databaseSizeBeforeCreate + 1);
         CompanyAdmin testCompanyAdmin = companyAdminList.get(companyAdminList.size() - 1);
         assertThat(testCompanyAdmin.getCompanyId()).isEqualTo(DEFAULT_COMPANY_ID);
+        assertThat(testCompanyAdmin.getUserId()).isEqualTo(DEFAULT_USER_ID);
     }
 
     @Test
@@ -131,7 +136,8 @@ public class CompanyAdminResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(companyAdmin.getId())))
-            .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.toString())));
+            .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.toString())))
+            .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID.toString())));
     }
 
     @Test
@@ -144,7 +150,8 @@ public class CompanyAdminResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(companyAdmin.getId()))
-            .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.toString()));
+            .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.toString()))
+            .andExpect(jsonPath("$.userId").value(DEFAULT_USER_ID.toString()));
     }
 
     @Test
@@ -164,7 +171,8 @@ public class CompanyAdminResourceIntTest {
         // Update the companyAdmin
         CompanyAdmin updatedCompanyAdmin = companyAdminRepository.findOne(companyAdmin.getId());
         updatedCompanyAdmin
-            .companyId(UPDATED_COMPANY_ID);
+            .companyId(UPDATED_COMPANY_ID)
+            .userId(UPDATED_USER_ID);
 
         restCompanyAdminMockMvc.perform(put("/api/company-admins")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -176,6 +184,7 @@ public class CompanyAdminResourceIntTest {
         assertThat(companyAdminList).hasSize(databaseSizeBeforeUpdate);
         CompanyAdmin testCompanyAdmin = companyAdminList.get(companyAdminList.size() - 1);
         assertThat(testCompanyAdmin.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
+        assertThat(testCompanyAdmin.getUserId()).isEqualTo(UPDATED_USER_ID);
     }
 
     @Test

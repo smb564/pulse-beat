@@ -25,6 +25,9 @@ public class Manager implements Serializable {
     @Field("department")
     private String department;
 
+    @Field("user_id")
+    private String userId;
+
     public String getId() {
         return id;
     }
@@ -59,6 +62,19 @@ public class Manager implements Serializable {
         this.department = department;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public Manager userId(String userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -85,6 +101,7 @@ public class Manager implements Serializable {
             "id=" + id +
             ", companyId='" + companyId + "'" +
             ", department='" + department + "'" +
+            ", userId='" + userId + "'" +
             '}';
     }
 }

@@ -22,6 +22,9 @@ public class CompanyAdmin implements Serializable {
     @Field("company_id")
     private String companyId;
 
+    @Field("user_id")
+    private String userId;
+
     public String getId() {
         return id;
     }
@@ -41,6 +44,19 @@ public class CompanyAdmin implements Serializable {
 
     public void setCompanyId(String companyId) {
         this.companyId = companyId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public CompanyAdmin userId(String userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -68,6 +84,7 @@ public class CompanyAdmin implements Serializable {
         return "CompanyAdmin{" +
             "id=" + id +
             ", companyId='" + companyId + "'" +
+            ", userId='" + userId + "'" +
             '}';
     }
 }

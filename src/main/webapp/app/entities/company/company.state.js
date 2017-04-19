@@ -9,17 +9,17 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-        .state('manager', {
+        .state('company', {
             parent: 'entity',
-            url: '/manager?page&sort&search',
+            url: '/company?page&sort&search',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'Managers'
+                pageTitle: 'Companies'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/manager/managers.html',
-                    controller: 'ManagerController',
+                    templateUrl: 'app/entities/company/companies.html',
+                    controller: 'CompanyController',
                     controllerAs: 'vm'
                 }
             },
@@ -46,27 +46,27 @@
                 }],
             }
         })
-        .state('manager-detail', {
-            parent: 'manager',
-            url: '/manager/{id}',
+        .state('company-detail', {
+            parent: 'company',
+            url: '/company/{id}',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'Manager'
+                pageTitle: 'Company'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/manager/manager-detail.html',
-                    controller: 'ManagerDetailController',
+                    templateUrl: 'app/entities/company/company-detail.html',
+                    controller: 'CompanyDetailController',
                     controllerAs: 'vm'
                 }
             },
             resolve: {
-                entity: ['$stateParams', 'Manager', function($stateParams, Manager) {
-                    return Manager.get({id : $stateParams.id}).$promise;
+                entity: ['$stateParams', 'Company', function($stateParams, Company) {
+                    return Company.get({id : $stateParams.id}).$promise;
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
-                        name: $state.current.name || 'manager',
+                        name: $state.current.name || 'company',
                         params: $state.params,
                         url: $state.href($state.current.name, $state.params)
                     };
@@ -74,22 +74,22 @@
                 }]
             }
         })
-        .state('manager-detail.edit', {
-            parent: 'manager-detail',
+        .state('company-detail.edit', {
+            parent: 'company-detail',
             url: '/detail/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/manager/manager-dialog.html',
-                    controller: 'ManagerDialogController',
+                    templateUrl: 'app/entities/company/company-dialog.html',
+                    controller: 'CompanyDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Manager', function(Manager) {
-                            return Manager.get({id : $stateParams.id}).$promise;
+                        entity: ['Company', function(Company) {
+                            return Company.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
@@ -99,80 +99,79 @@
                 });
             }]
         })
-        .state('manager.new', {
-            parent: 'manager',
+        .state('company.new', {
+            parent: 'company',
             url: '/new',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/manager/manager-dialog.html',
-                    controller: 'ManagerDialogController',
+                    templateUrl: 'app/entities/company/company-dialog.html',
+                    controller: 'CompanyDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: function () {
                             return {
-                                companyId: null,
-                                department: null,
-                                userId: null,
+                                name: null,
+                                description: null,
                                 id: null
                             };
                         }
                     }
                 }).result.then(function() {
-                    $state.go('manager', null, { reload: 'manager' });
+                    $state.go('company', null, { reload: 'company' });
                 }, function() {
-                    $state.go('manager');
+                    $state.go('company');
                 });
             }]
         })
-        .state('manager.edit', {
-            parent: 'manager',
+        .state('company.edit', {
+            parent: 'company',
             url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/manager/manager-dialog.html',
-                    controller: 'ManagerDialogController',
+                    templateUrl: 'app/entities/company/company-dialog.html',
+                    controller: 'CompanyDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Manager', function(Manager) {
-                            return Manager.get({id : $stateParams.id}).$promise;
+                        entity: ['Company', function(Company) {
+                            return Company.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('manager', null, { reload: 'manager' });
+                    $state.go('company', null, { reload: 'company' });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
-        .state('manager.delete', {
-            parent: 'manager',
+        .state('company.delete', {
+            parent: 'company',
             url: '/{id}/delete',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/manager/manager-delete-dialog.html',
-                    controller: 'ManagerDeleteController',
+                    templateUrl: 'app/entities/company/company-delete-dialog.html',
+                    controller: 'CompanyDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
-                        entity: ['Manager', function(Manager) {
-                            return Manager.get({id : $stateParams.id}).$promise;
+                        entity: ['Company', function(Company) {
+                            return Company.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('manager', null, { reload: 'manager' });
+                    $state.go('company', null, { reload: 'company' });
                 }, function() {
                     $state.go('^');
                 });

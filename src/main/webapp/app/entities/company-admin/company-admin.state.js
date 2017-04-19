@@ -116,6 +116,7 @@
                         entity: function () {
                             return {
                                 companyId: null,
+                                userId: null,
                                 id: null
                             };
                         }
