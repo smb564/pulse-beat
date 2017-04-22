@@ -94,7 +94,7 @@
                 <option ng-repeat="company in vm.companies track by $index" ng-selected="vm.companyAdmin.companyId===company['id']" ng-value="company['id']">{{company['name']}}</option>
             </select>
         </div>
-        
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
