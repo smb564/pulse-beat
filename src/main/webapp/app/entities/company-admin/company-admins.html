@@ -21,6 +21,9 @@
                     <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="companyId"><span>Company Id</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="userId"><span>User Id</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="name"><span>Name</span><span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="email"><span>Email</span><span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="company"><span>Company</span><span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -29,6 +32,9 @@
                     <td><a ui-sref="company-admin-detail({id:companyAdmin.id})">{{companyAdmin.id}}</a></td>
                     <td>{{companyAdmin.companyId}}</td>
                     <td>{{companyAdmin.userId}}</td>
+                    <td>{{companyAdmin.name}}</td>
+                    <td>{{companyAdmin.email}}</td>
+                    <td>{{companyAdmin.company}}</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"

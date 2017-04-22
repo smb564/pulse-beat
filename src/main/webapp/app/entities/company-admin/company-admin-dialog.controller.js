@@ -9,7 +9,6 @@
 
     function CompanyAdminDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, CompanyAdmin, User, Company) {
         var vm = this;
-        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_COMPANY'];
         vm.companyAdmin = entity;
 
         // load the user data if userId is not null (update)
@@ -36,17 +35,22 @@
 
         function save () {
             vm.isSaving = true;
-            if (vm.companyAdmin.id !== null) {
-                CompanyAdmin.update(vm.companyAdmin, onSaveSuccess, onSaveError);
-            } else {
-                CompanyAdmin.save(vm.companyAdmin, onSaveSuccess, onSaveError);
+
+            // set user authorities to ROLE_MANAGER
+            vm.user.authorities = ['ROLE_COMPANY'];
+
+            if (vm.companyAdmin.id !== null){
+                User.update(vm.user, function(result){
+                    CompanyAdmin.update(vm.companyAdmin, onSaveSuccess, onSaveError);
+                }, onSaveError);
+
+            } else{
+                User.save(vm.user, function(result){
+                    vm.companyAdmin.userId = result.login;
+                    CompanyAdmin.save(vm.companyAdmin, onSaveSuccess, onSaveError);
+                }, onSaveError);
             }
 
-            if (vm.user.id !== null){
-                User.update(vm.user, onSaveSuccess, onSaveError);
-            } else{
-                User.save(vm.user, onSaveSuccess, onSaveError);
-            }
         }
 
         function onSaveSuccess (result) {
@@ -55,7 +59,8 @@
             vm.isSaving = false;
         }
 
-        function onSaveError () {
+        function onSaveError (err) {
+            console.log(err);
             vm.isSaving = false;
         }
 

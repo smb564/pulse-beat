@@ -5,9 +5,9 @@
         .module('pulsebeatApp')
         .controller('CompanyAdminController', CompanyAdminController);
 
-    CompanyAdminController.$inject = ['$state', 'CompanyAdmin', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    CompanyAdminController.$inject = ['$state', 'CompanyAdmin', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'User', 'Company'];
 
-    function CompanyAdminController($state, CompanyAdmin, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function CompanyAdminController($state, CompanyAdmin, ParseLinks, AlertService, paginationConstants, pagingParams, User, Company) {
 
         var vm = this;
 
@@ -38,6 +38,38 @@
                 vm.queryCount = vm.totalItems;
                 vm.companyAdmins = data;
                 vm.page = pagingParams.page;
+
+                // load company names and user info of Company Admins
+                for(var i=0; i < vm.companyAdmins.length; i++){
+                    // Get the company name
+                    Company.get({'id' : vm.companyAdmins[i].companyId}, function(result){
+                        // Since async, loop might be over and i might be undefined
+                        // find the correct companyAdmin using id, and add
+
+                        for(var j = 0; j < vm.companyAdmins.length; j++){
+                            // multiple admins can have the same company
+                            if (result.id === vm.companyAdmins[j].companyId){
+                                vm.companyAdmins[j].company = result.name;
+                            }
+                        }
+
+                    });
+
+                    // get the user data
+                    User.get({'login' : vm.companyAdmins[i].userId}, function(result){
+
+                        for(var j=0; j < vm.companyAdmins.length; j++){
+                            if(result.login === vm.companyAdmins[j].userId){
+                                vm.companyAdmins[j].name = result.firstName + " " + result.lastName;
+                                vm.companyAdmins[j].email = result.email;
+                                // one to one mapping
+                                break;
+                            }
+                        }
+
+                    });
+
+                }
             }
             function onError(error) {
                 AlertService.error(error.data.message);
