@@ -5,12 +5,24 @@
         .module('pulsebeatApp')
         .controller('CompanyAdminDialogController', CompanyAdminDialogController);
 
-    CompanyAdminDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'CompanyAdmin'];
+    CompanyAdminDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'CompanyAdmin', 'User', 'Company'];
 
-    function CompanyAdminDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, CompanyAdmin) {
+    function CompanyAdminDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, CompanyAdmin, User, Company) {
         var vm = this;
-
+        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_COMPANY'];
         vm.companyAdmin = entity;
+
+        // load the user data if userId is not null (update)
+        if (vm.companyAdmin.userId !== null){
+            User.get({'login' : vm.companyAdmin.userId},
+            function(result){
+                vm.user = result;
+            });
+        }
+
+        // load the list of companies
+        vm.companies = Company.query();
+
         vm.clear = clear;
         vm.save = save;
 
@@ -28,6 +40,12 @@
                 CompanyAdmin.update(vm.companyAdmin, onSaveSuccess, onSaveError);
             } else {
                 CompanyAdmin.save(vm.companyAdmin, onSaveSuccess, onSaveError);
+            }
+
+            if (vm.user.id !== null){
+                User.update(vm.user, onSaveSuccess, onSaveError);
+            } else{
+                User.save(vm.user, onSaveSuccess, onSaveError);
             }
         }
 

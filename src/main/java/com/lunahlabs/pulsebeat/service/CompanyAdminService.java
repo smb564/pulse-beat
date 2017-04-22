@@ -17,7 +17,7 @@ import java.util.List;
 public class CompanyAdminService {
 
     private final Logger log = LoggerFactory.getLogger(CompanyAdminService.class);
-    
+
     private final CompanyAdminRepository companyAdminRepository;
 
     public CompanyAdminService(CompanyAdminRepository companyAdminRepository) {
@@ -38,7 +38,7 @@ public class CompanyAdminService {
 
     /**
      *  Get all the companyAdmins.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
@@ -69,4 +69,5 @@ public class CompanyAdminService {
         log.debug("Request to delete CompanyAdmin : {}", id);
         companyAdminRepository.delete(id);
     }
+
 }
