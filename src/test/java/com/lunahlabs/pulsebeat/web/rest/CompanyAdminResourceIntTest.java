@@ -5,6 +5,7 @@ import com.lunahlabs.pulsebeat.PulsebeatApp;
 import com.lunahlabs.pulsebeat.domain.CompanyAdmin;
 import com.lunahlabs.pulsebeat.repository.CompanyAdminRepository;
 import com.lunahlabs.pulsebeat.service.CompanyAdminService;
+import com.lunahlabs.pulsebeat.service.UserService;
 import com.lunahlabs.pulsebeat.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -57,6 +58,9 @@ public class CompanyAdminResourceIntTest {
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
+    @Autowired
+    private UserService userService;
+
     private MockMvc restCompanyAdminMockMvc;
 
     private CompanyAdmin companyAdmin;
@@ -64,7 +68,7 @@ public class CompanyAdminResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        CompanyAdminResource companyAdminResource = new CompanyAdminResource(companyAdminService);
+        CompanyAdminResource companyAdminResource = new CompanyAdminResource(companyAdminService, userService);
         this.restCompanyAdminMockMvc = MockMvcBuilders.standaloneSetup(companyAdminResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

@@ -3,6 +3,7 @@ package com.lunahlabs.pulsebeat.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.lunahlabs.pulsebeat.domain.CompanyAdmin;
 import com.lunahlabs.pulsebeat.service.CompanyAdminService;
+import com.lunahlabs.pulsebeat.service.UserService;
 import com.lunahlabs.pulsebeat.web.rest.util.HeaderUtil;
 import com.lunahlabs.pulsebeat.web.rest.util.PaginationUtil;
 import io.swagger.annotations.ApiParam;
@@ -31,11 +32,14 @@ public class CompanyAdminResource {
     private final Logger log = LoggerFactory.getLogger(CompanyAdminResource.class);
 
     private static final String ENTITY_NAME = "companyAdmin";
-        
+
     private final CompanyAdminService companyAdminService;
 
-    public CompanyAdminResource(CompanyAdminService companyAdminService) {
+    private final UserService userService;
+
+    public CompanyAdminResource(CompanyAdminService companyAdminService, UserService userService) {
         this.companyAdminService = companyAdminService;
+        this.userService = userService;
     }
 
     /**
@@ -123,4 +127,17 @@ public class CompanyAdminResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    /**
+     * GET  /company-admins/login/:login : get the "login" companyAdmin.
+     *
+     * @param login the login of the companyAdmin to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the companyAdmin, or with status 404 (Not Found)
+     */
+    @GetMapping("/company-admins/login/{login}")
+    @Timed
+    public ResponseEntity<CompanyAdmin> getCompanyAdminByLogin(@PathVariable String login) {
+        log.debug("REST request to get CompanyAdmin for login : {}", login);
+        CompanyAdmin companyAdmin = companyAdminService.findOneByLogin(login, userService);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(companyAdmin));
+    }
 }

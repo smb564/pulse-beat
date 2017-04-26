@@ -1,7 +1,9 @@
 package com.lunahlabs.pulsebeat.service;
 
 import com.lunahlabs.pulsebeat.domain.CompanyAdmin;
+import com.lunahlabs.pulsebeat.domain.User;
 import com.lunahlabs.pulsebeat.repository.CompanyAdminRepository;
+import com.lunahlabs.pulsebeat.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service Implementation for managing CompanyAdmin.
@@ -69,5 +72,25 @@ public class CompanyAdminService {
         log.debug("Request to delete CompanyAdmin : {}", id);
         companyAdminRepository.delete(id);
     }
+
+
+    /**
+     *  Get one companyAdmin by login.
+     *
+     *  @param login the login of the entity
+     *  @return the entity
+     */
+    public CompanyAdmin findOneByLogin(String login, UserService userService) {
+        log.debug("Request to get CompanyAdmin by login : {}", login);
+        Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(login);
+
+        if (userOptional.isPresent()){
+            User user = userOptional.get();
+            CompanyAdmin companyAdmin = companyAdminRepository.findByUserId(user.getId()).get();
+            return companyAdmin;
+        }
+        return null;
+    }
+
 
 }
